@@ -12,8 +12,9 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class SeriesController extends AbstractController
 {
-    public function __construct(private SeriesRepository $seriesRepository)
-    {
+    public function __construct(
+        private SeriesRepository $seriesRepository
+    ) {
         
     }
 
@@ -27,13 +28,13 @@ class SeriesController extends AbstractController
         ]);
     }
 
-    #[Route('/series/create', methods: ['GET'])]
+    #[Route('/series/create', name: 'app_series_form', methods: ['GET'])]
     public function addSeriesForm(): Response
     {
         return $this->render('series/form.html.twig');
     }
 
-    #[Route('/series/create', methods: ['POST'])]
+    #[Route('/series/create', name: 'app_add_series', methods: ['POST'])]
     public function addSeries(Request $request): Response
     {
         $seriesName = $request->request->get('name');
@@ -41,5 +42,17 @@ class SeriesController extends AbstractController
 
         $this->seriesRepository->add($series, true);
         return new RedirectResponse('/series');
+    }
+
+    #[Route(
+        '/series/delete/{id}', 
+        name: 'app_delete_series', 
+        methods: ['DELETE'],
+        requirements: ['id' => '[0-9]+'])]
+    public function deleteSeries(int $id): Response
+    {
+        $this->seriesRepository->removeById($id);
+
+        return new RedirectResponse(url: '/series');
     }
 }
