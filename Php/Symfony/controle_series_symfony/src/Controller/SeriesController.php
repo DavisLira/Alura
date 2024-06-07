@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
-use App\Dto\SeriesCreateFormInput;
+use App\DTO\SeriesCreateFormInput;
+use App\Entity\Episode;
+use App\Entity\Season;
 use App\Entity\Series;
 use App\Form\SeriesType;
 use App\Repository\SeriesRepository;
@@ -51,15 +53,20 @@ class SeriesController extends AbstractController
         }
 
         $series = new Series($input->seriesName);
-        for ($i=0; $i < ; $i++) { 
-            # code...
+        for ($i = 1; $i <= $input->seasonsQuantity; $i++) { 
+            $season = new Season($i);
+            for($j = 1; $j <= $input->episodesPerSeason; $j++)
+            {
+                $season->addEpisode(new Episode($j));
+            }
+            $series->addSeason($season);
         }
         
         $this->addFlash(
             'success', 
-            "Série \"{$input->getName()}\" adicionada com sucesso");
+            "Série \"{$series->getName()}\" adicionada com sucesso");
 
-        $this->seriesRepository->add($input, true);
+        $this->seriesRepository->add($series, true);
         return new RedirectResponse('/series');
     }
 
