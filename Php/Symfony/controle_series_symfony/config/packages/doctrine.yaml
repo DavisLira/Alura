@@ -24,12 +24,6 @@ doctrine:
                 alias: App
         controller_resolver:
             auto_mapping: true
-        second_level_cache:
-            enabled: true
-            region_cache_driver:
-                type: pool
-                pool: cache.app
-
 
 when@test:
     doctrine:
