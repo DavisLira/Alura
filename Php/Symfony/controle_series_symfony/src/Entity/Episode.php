@@ -16,6 +16,7 @@ class Episode
 
     #[ORM\ManyToOne(targetEntity: Season::class, inversedBy: 'episodes')]
     #[ORM\JoinColumn(nullable: false)]
+    #[ORM\Cache]
     private Season $season;
 
     public function __construct(
