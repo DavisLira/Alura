@@ -19,7 +19,7 @@ class Episode
     private Season $season;
 
     #[ORM\Column]
-    private bool $watched;
+    private bool $watched = false;
 
     public function __construct(
         #[ORM\Column(type: Types::SMALLINT)]
