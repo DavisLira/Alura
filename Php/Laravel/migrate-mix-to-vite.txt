@@ -1,0 +1,4 @@
+ao inves de "npm run dev" , rodar "npm run mix"
+
+
+https://github.com/laravel/vite-plugin/blob/main/UPGRADE.md#migrating-from-laravel-mix-to-vite
