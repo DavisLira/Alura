@@ -14,5 +14,11 @@
                 @isset($nome) value="{{ $nome }}" @endisset>
     </div>
 
-    <button type="submit" class="btn btn-primary">Adicionar</button>
+    <button type="submit" class="btn btn-primary">
+        @if (@isset($nome))
+        Editar
+        @else
+        Adicionar
+        @endif
+    </button>
 </form>
