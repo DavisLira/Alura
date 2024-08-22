@@ -1,21 +1,21 @@
 <form action="{{ $action }}" method="POST">
     @csrf
 
-    @isset($nome)
+    @if($update)
     @method('PUT')
-    @endisset
+    @endif
 
     <div class="mb-3">
-        <label for="nome" class="form-label">Nome:</label>
+        <label for="name" class="form-label">Nome:</label>
         <input type="text" 
                 id="name" 
-                name="nome" 
+                name="name" 
                 class="form-control"
-                @isset($nome) value="{{ $nome }}" @endisset>
+                @isset($name) value="{{ $name }}" @endisset>
     </div>
 
     <button type="submit" class="btn btn-primary">
-        @if (@isset($nome))
+        @if (@isset($name))
         Editar
         @else
         Adicionar

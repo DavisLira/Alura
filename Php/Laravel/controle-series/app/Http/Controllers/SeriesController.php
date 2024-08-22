@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Serie;
+use App\Http\Requests\SeriesFormRequest;
+use App\Models\Series;
 use Illuminate\Http\Request;
 
 class SeriesController extends Controller
 {
     public function index()
     {
-        $series = Serie::query()->orderBy('nome')->get();
+        $series = Series::all();
         $mensagemSucesso = session('mensagem.sucesso');
 
         return view('series.index')->with('series', $series)
@@ -21,31 +22,31 @@ class SeriesController extends Controller
         return view('series.create');
     }
 
-    public function store(Request $request)
+    public function store(SeriesFormRequest $request)
     {
-        $series = Serie::create($request->all());
-        session()->flash('mensagem.sucesso', "Série '{$series->nome}' adicionada com sucesso");
+        $series = Series::create($request->all());
+        session()->flash('mensagem.sucesso', "Série '{$series->name}' adicionada com sucesso");
 
         return to_route('series.index');
     }
 
-    public function destroy(Serie $series)
+    public function destroy(Series $series)
     {
         $series->delete();
-        session()->flash('mensagem.sucesso', "Série '{$series->nome}' removida com sucesso");
+        session()->flash('mensagem.sucesso', "Série '{$series->name}' removida com sucesso");
 
         return to_route('series.index');
     }
 
-    public function edit(Serie $series)
+    public function edit(Series $series)
     {
         return view('series.edit')->with('serie', $series);
     }
 
-    public function update(Serie $series, Request $request)
+    public function update(Series $series, SeriesFormRequest $request)
     {
         $series->fill($request->all())->save();
-        session()->flash('mensagem.sucesso', "Série '{$series->nome}' atualizada com sucesso");
+        session()->flash('mensagem.sucesso', "Série '{$series->name}' atualizada com sucesso");
 
         return to_route('series.index');
     }
