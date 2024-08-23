@@ -7,6 +7,7 @@ use App\Models\Episode;
 use App\Models\Season;
 use App\Models\Series;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SeriesController extends Controller
 {
@@ -26,29 +27,38 @@ class SeriesController extends Controller
 
     public function store(SeriesFormRequest $request)
     {
-        $series = Series::create($request->all());
+        try {
+            DB::beginTransaction();
+            $series = Series::create($request->all());
 
-        $seasons = [];
-        for ($i = 1; $i <= $request->seasonsQty; $i++) {
-            $seasons[] = [
-                'series_id' => $series->id,
-                'number' => $i,
-            ];
-        }
-        Season::insert($seasons);
-
-        $episodes = [];
-        foreach ($series->seasons as $season) {
-            for ($j = 1; $j <= $request->episodesPerSeason; $j++) {
-                $episodes[] = [
-                    'season_id' => $season->id,
-                    'number' => $j,
+            $seasons = [];
+            for ($i = 1; $i <= $request->seasonsQty; $i++) {
+                $seasons[] = [
+                    'series_id' => $series->id,
+                    'number' => $i,
                 ];
             }
-        }
-        Episode::insert($episodes);
+            Season::insert($seasons);
 
-        session()->flash('mensagem.sucesso', "Série '{$series->name}' adicionada com sucesso");
+            $episodes = [];
+            foreach ($series->seasons as $season) {
+                for ($j = 1; $j <= $request->episodesPerSeason; $j++) {
+                    $episodes[] = [
+                        'season_id' => $season->id,
+                        'number' => $j,
+                    ];
+                }
+            }
+            Episode::insert($episodes);
+            DB::commit();
+
+            session()->flash('mensagem.sucesso', "Série '{$series->name}' adicionada com sucesso");
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            session()->flash('mensagem.sucesso', "Erro ao adicionar a série: {$e->getMessage()}");
+        }
 
         return to_route('series.index');
     }
