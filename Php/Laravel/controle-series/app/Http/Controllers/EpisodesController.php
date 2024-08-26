@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Episode;
 use App\Models\Season;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EpisodesController
 {
@@ -19,14 +19,22 @@ class EpisodesController
 
     public function update(Request $request, Season $season)
     {
-        $watchedEpisodes = $request->episodes;
-        $season->episodes->each(function (Episode $episode) use ($watchedEpisodes) {
-            $episode->watched = in_array($episode->id, $watchedEpisodes);
-        });
+        $watchedEpisodes = implode(', ', $request->episodes ?? []);
 
-        $season->push();
+        if (empty($watchedEpisodes)) {
+            DB::transaction(function() use ($season) {
+                $season->episodes()->update(['watched' => 0]);
+            });
 
-        session()->flash('mensagem.sucesso', "Episódios marcados como assistidos");
+            session()->flash('mensagem.sucesso', "Episódios marcados como não assistidos");
+        } else {
+            DB::transaction(function () use ($watchedEpisodes, $season) {
+                $season->episodes()->update(['watched' => DB::raw("case when id in ($watchedEpisodes) then 1 else 0 end")]);
+            });
+            
+            session()->flash('mensagem.sucesso', "Episódios marcados como assistidos");
+        }
+
 
         return to_route('episodes.index', $season->id);
     }
