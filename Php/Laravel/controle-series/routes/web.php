@@ -23,7 +23,7 @@ Route::middleware('authenticator')->group(function () {
 
 Route::get('/login', [LoginContoller::class, 'index'])->name('login');
 Route::post('/login', [LoginContoller::class, 'store'])->name('signin');
-Route::get('/logout', [LoginContoller::class, 'destroy'])->name('logout');
+Route::post('/logout', [LoginContoller::class, 'destroy'])->name('logout');
 
 Route::get('/register', [UsersController::class, 'create'])->name('users.create');
 Route::post('/register', [UsersController::class, 'store'])->name('users.store');
