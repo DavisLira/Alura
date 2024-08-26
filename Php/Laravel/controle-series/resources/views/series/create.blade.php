@@ -1,5 +1,4 @@
 <x-layout title="Nova Série">
-    <a class="btn btn-dark" href="{{ route('series.index') }}"><< Voltar</a>
 
     <form action="{{ route('series.store') }}" method="POST">
     @csrf
