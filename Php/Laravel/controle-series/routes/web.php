@@ -5,6 +5,7 @@ use App\Http\Controllers\LoginContoller;
 use App\Http\Controllers\SeasonsController;
 use App\Http\Controllers\SeriesController;
 use App\Http\Controllers\UsersController;
+use App\Mail\SeriesCreated;
 use Illuminate\Support\Facades\Route;
 
 Route::resource('/series', SeriesController::class)
@@ -19,6 +20,13 @@ Route::middleware('authenticator')->group(function () {
     
     Route::get('seasons/{season}/episodes', [EpisodesController::class, 'index'])->name('episodes.index');
     Route::post('seasons/{season}/episodes', [EpisodesController::class, 'update'])->name('episodes.update');
+});
+
+Route::get('/email', function () {
+    return new SeriesCreated(
+        'Série teste',
+        3, 5, 10
+    );
 });
 
 Route::get('/login', [LoginContoller::class, 'index'])->name('login');
