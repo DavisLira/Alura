@@ -1,0 +1,32 @@
+composer create-project laravel/laravel series-control
+
+https://github.com/lucascudo/laravel-pt-BR-localization
+
+composer require laravel/breeze --dev
+php artisan breeze:install
+php artisan migrate
+npm install
+npm run dev
+
+composer require barryvdh/laravel-debugbar --dev
+
+
+TAILWIND E BOOTSTRAP
+resources->css-> mudar app.css para tailwind.css
+ir nos layouts e mudar o @vite para
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/css/tailwind.css'])
+
+npm i boottrap
+no arquivo vite.config.js
+import path from 'path';
+e fora dos plugins adicionar
+
+resolve: {
+    alias: {
+        "@": "resources/js",
+        '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap/dist'),
+    },
+}
+
+em resources/css/app.css
+@import url("~bootstrap/css/bootstrap.min.css");
