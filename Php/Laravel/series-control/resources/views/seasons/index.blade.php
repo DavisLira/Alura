@@ -1,4 +1,4 @@
-<x-layout title="{{ __('messages.app_name') }}">
+<x-layout title="Temporadas de {!! $series->name !!}">
     
     <ul class="list-group">
         @foreach ($seasons as $season)
