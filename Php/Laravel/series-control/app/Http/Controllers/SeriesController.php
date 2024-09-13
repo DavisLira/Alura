@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SeriesCreated as EventsSeriesCreated;
 use App\Http\Requests\SeriesFormRequest;
 use App\Mail\SeriesCreated;
 use App\Models\Series;
 use App\Repositories\SeriesRepository;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
@@ -33,14 +35,13 @@ class SeriesController extends Controller
     {
         try {
             $series = $this->repository->add($request);
-
-            $email = new SeriesCreated(
+            $eventsSeriesCreated = new EventsSeriesCreated(
                 $series->name,
                 $series->id,
-                $request->seasonsQty,
-                $request->episodesPerSeason
+                $series->seasonsQty,
+                $series->episodesPerSeason,
             );
-            Mail::to($request->user())->send($email);
+            event($eventsSeriesCreated);
 
             session()->flash('mensagem.sucesso', "Série '{$series->name}' adicionada com sucesso");
 
