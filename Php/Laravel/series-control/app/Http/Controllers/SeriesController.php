@@ -38,8 +38,8 @@ class SeriesController extends Controller
             $eventsSeriesCreated = new EventsSeriesCreated(
                 $series->name,
                 $series->id,
-                $series->seasonsQty,
-                $series->episodesPerSeason,
+                $request->seasonsQty,
+                $request->episodesPerSeason,
             );
             event($eventsSeriesCreated);
 
