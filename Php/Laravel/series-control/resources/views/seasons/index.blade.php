@@ -1,4 +1,6 @@
 <x-layout title="Temporadas de {!! $series->name !!}">
+
+    <img src="{{ asset('storage/' . $series->cover) }}" alt="Capa da série" class="image-fluid">
     
     <ul class="list-group">
         @foreach ($seasons as $season)

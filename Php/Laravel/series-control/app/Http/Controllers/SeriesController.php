@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Dto\SeriesData;
 use App\Events\SeriesCreated as EventsSeriesCreated;
 use App\Http\Requests\SeriesFormRequest;
 use App\Mail\SeriesCreated;
@@ -34,7 +35,18 @@ class SeriesController extends Controller
     public function store(SeriesFormRequest $request)
     {
         try {
-            $series = $this->repository->add($request);
+            $coverPath = $request->file('cover')
+                ->store('series_cover', 'public');
+
+            $seriesData = new SeriesData(
+                $request->name,
+                $request->seasonsQty,
+                $request->episodesPerSeason,
+                $coverPath 
+            );
+
+            $series = $this->repository->add($seriesData);
+
             $eventsSeriesCreated = new EventsSeriesCreated(
                 $series->name,
                 $series->id,
