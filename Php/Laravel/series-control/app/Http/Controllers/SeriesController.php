@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Dto\SeriesData;
 use App\Events\SeriesCreated as EventsSeriesCreated;
 use App\Http\Requests\SeriesFormRequest;
+use App\Jobs\DeleteSeriesCover;
 use App\Mail\SeriesCreated;
 use App\Models\Series;
 use App\Repositories\SeriesRepository;
@@ -70,6 +71,8 @@ class SeriesController extends Controller
     {
         $series->delete();
         session()->flash('mensagem.sucesso', "Série '{$series->name}' removida com sucesso");
+
+        DeleteSeriesCover::dispatch($series->cover_path);
 
         return to_route('series.index');
     }
