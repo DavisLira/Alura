@@ -20,3 +20,4 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+Route::get('/series', [SeriesController::class, 'index']);
