@@ -24,7 +24,7 @@ class SeriesFormRequest extends FormRequest
     {
         return [
             'name' => ['required', 'min:3'],
-            'cover' => Rule::when($this->method() === 'POST', ['required', 'image', 'max: 500']), // mínimo de 500kb
+            'cover' => Rule::when($this->method() === 'POST', ['image', 'max: 500']), // mínimo de 500kb
             'seasonsQty' => Rule::when($this->method() === 'POST', ['required', 'numeric', 'min:1']),
             'episodesPerSeason' => Rule::when($this->method() === 'POST', ['required', 'numeric', 'min:1']),
         ];
