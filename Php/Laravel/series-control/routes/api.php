@@ -21,3 +21,11 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::apiResource('/series', SeriesController::class);
+
+Route::get('/series/{series}/seasons', function (Series $series) {
+    return $series->seasons;
+});
+
+Route::get('/series/{series}/episodes', function (Series $series) {
+    return $series->episodes;
+});
