@@ -7,6 +7,7 @@ use App\Http\Dto\SeriesData;
 use App\Http\Requests\SeriesFormRequest;
 use App\Models\Series;
 use App\Repositories\SeriesRepository;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 
 class SeriesController extends Controller
@@ -58,8 +59,9 @@ class SeriesController extends Controller
         return $series;
     }
 
-    public function delete(int $series)
+    public function delete(int $series, Authenticatable $user)
     {
+        $user->tokenCan('series:delete');
         Series::destroy($series);
         return response()->noContent();
     }
