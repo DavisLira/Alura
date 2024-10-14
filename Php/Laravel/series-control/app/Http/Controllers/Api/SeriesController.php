@@ -59,7 +59,7 @@ class SeriesController extends Controller
         return $series;
     }
 
-    public function delete(int $series, Authenticatable $user)
+    public function destroy(int $series, Authenticatable $user)
     {
         $user->tokenCan('series:delete');
         Series::destroy($series);
